@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 require('dotenv').config();
 const bodyParser = require('body-parser');
-
+const moment = require('moment-timezone')
 const { MongoClient, ObjectId } = require('mongodb');
 
 const app = express();
@@ -41,7 +41,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Route pour soumettre des tâches
 app.post('/', async (req, res) => {
-    const dateJ = req.body.date ? new Date(req.body.date) : new Date()
+    const dateJ = req.body.date 
+        ? moment.tz(req.body.date, "Europe/Paris").toDate() 
+        : moment.tz(new Date(), "Europe/Paris").toDate();
     const task = {
         name: req.body.task,
         date: dateJ,
