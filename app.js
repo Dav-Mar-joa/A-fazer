@@ -78,10 +78,28 @@ app.post('/Courses', async (req, res) => {
     }
 });
 
+app.post('/Phrases', async (req, res) => {
+    const phrase = {
+        name: req.body.say,
+        qui: req.body.sayTo,
+        priority2: req.body.priority2
+    };
+
+    try {
+        const collection = db.collection('Phrases'); // Utiliser la collection "courses"
+        await collection.insertOne(phrase);
+        res.redirect('/?successCourse=true'); // Redirection avec un paramètre de succès pour les courses
+    } catch (err) {
+        console.error('Erreur lors de l\'ajout de la course :', err);
+        res.status(500).send('Erreur lors de l\'ajout de la course');
+    }
+});
+
 // Route pour la page d'accueil
 app.get('/', async (req, res) => {
     const success = req.query.success === 'true'; // Vérification du paramètre de succès
     const successCourse = req.query.successCourse === 'true';
+    const successPhrase = req.query.successPhrase === 'true';
      
 
     try {
@@ -90,15 +108,17 @@ app.get('/', async (req, res) => {
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
 
-        console.log('Today:', today);
-        console.log('Tomorrow:', tomorrow);
+        // console.log('Today:', today);
+        // console.log('Tomorrow:', tomorrow);
 
         const collection = db.collection(process.env.MONGODB_COLLECTION);
         const collectionCourses = db.collection('Courses');
+        const collectionPhrases = db.collection('Phrases');
         const tasks = await collection.find({}).sort({ date: -1 }).toArray();
         const courses = await collectionCourses.find({}).toArray();
+        const phrases = await collectionPhrases.find({}).toArray();
         tasks.forEach(task => {
-          console.log('Original Date:', task.date.toString().slice(0, 10));
+        //   console.log('Original Date:', task.date.toString().slice(0, 10));
           
         });
 
@@ -107,6 +127,7 @@ app.get('/', async (req, res) => {
             message: 'Bienvenue sur ma montre digitale', 
             tasks: tasks || [], 
             courses: courses || [],
+            phrases: phrases || [],
             successCourse,
             success 
         });
@@ -135,6 +156,17 @@ app.delete('/delete-course/:id', async (req, res) => {
     } catch (err) {
         console.error('Erreur lors de la suppression de la course :', err);
         res.status(500).send('Erreur lors de la suppression de la course');
+    }
+})
+app.delete('/delete-phrase/:id', async (req, res) => {
+    const phraseId = req.params.id;
+    try {
+        const collection = db.collection('Phrases');
+        await collection.deleteOne({ _id: new ObjectId(phraseId) });
+        res.status(200).send('Phrase supprimée avec succès');
+    } catch (err) {
+        console.error('Erreur lors de la suppression de la phrase :', err);
+        res.status(500).send('Erreur lors de la suppression de la phrase');
     }
 })
 // Démarrer le serveur sur le port spécifié dans .env ou sur 4000 par défaut
