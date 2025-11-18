@@ -5,7 +5,7 @@ html(lang="en")
     title Tâches du jour
     link(rel="manifest" href="/manifest.json")
     style.
-     body {
+      body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 20px;
@@ -186,28 +186,6 @@ html(lang="fr")
       }
       .date-time p {
         margin: 0; /* supprime les marges par défaut */
-      }
-      .phraseQuiItem {
-        text-align: center;
-        border: 2px solid black;
-        border-radius: 10px;
-        padding: 12px;
-        margin-right: 30px;
-        margin-top: 20px;
-        color: #000;
-        background-color: #fdfd96; /* jaune post-it doux */
-        transform: rotate(-5deg);
-        box-shadow: 5px 8px 15px rgba(0, 0, 0, 0.3);
-        display: inline-block;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        word-wrap: break-word;   /* ancienne syntaxe */
-        overflow-wrap: break-word; /* syntaxe moderne */
-      }
-
-      .phraseQuiItem {
-        margin-left: 10px !important;
-        margin-top: 10px !important;
-        font-size:1rem; !important;
       }
    
   body
